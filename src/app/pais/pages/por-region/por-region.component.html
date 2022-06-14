@@ -1,24 +1,33 @@
-<h2>Por Region</h2>
+<h3>Buscar por región <small>{{regionActiva | titlecase}}</small></h3>
 <hr>
+<h5>Seleccione la región</h5>
 
 <div class="row">
   <div class="col">
-    <app-pais-input
-      (onEnter)="buscar( $event)"
-      (onDebounce)="sugerencias ($event)"
-      placeholder="Buscar region"
-    ></app-pais-input>
-  </div>
-</div>
+    <!--[class.btn-primary] = "region === regionActiva"
+      Para añadir una clase de manera dinamica segun condicion-->
 
-<hr>
-<div  *ngIf="hayError"
-    class="alert alert-danger">
-    No se encontró nada con el término {{termino}}
-</div>
+    <!-- [ngClass] = "{
+        'btn-primary': regionActiva === region,
+        'btn-outline-primary': regionActiva !== region
+      }" Para que compruebe varias condiciones y añada o elimine una clase-->
 
-<div *ngIf="paises.length > 0" class="row">
-  <div class="col">
-    <app-pais-tabla [paises]="paises"></app-pais-tabla>
+      <!-- [class]="(region === regionActiva) ? 'btn btn-primary' : 'btn btn-outline-primary'"
+        En una sola sola comprobación, al poner class entre [] ejecuta una condición typescript. Si cumple la condición añade a class la primera condición
+        antes de los : , si no la cumple, añade a class la segunda condición después de los : -->
+
+    <button
+      *ngFor="let region of regiones"
+      [class]="getClaseCSS(region)"
+      (click)="activarRegion(region)">
+      {{region | titlecase }}
+    </button>
   </div>
+
+  <div *ngIf="paises.length > 0" class="row">
+    <div class="col">
+      <app-pais-tabla [paises]="paises"></app-pais-tabla>
+    </div>
+  </div>
+
 </div>

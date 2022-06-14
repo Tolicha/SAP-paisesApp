@@ -6,35 +6,50 @@ import { PaisService } from '../../services/pais.service';
   selector: 'app-por-region',
   templateUrl: './por-region.component.html',
   styles: [
+    `button{
+      margin-right: 5px;
+    }
+    `
   ]
 })
 export class PorRegionComponent {
 
-  termino: string = ''
-  hayError: boolean = false;
+  regiones: string[] = ['EU', 'EFTA', 'CARICOM', 'PA', 'AU', 'USAN', 'EEU', 'AL', 'ASEAN', 'CAIS', 'CEFTA', 'NAFTA', 'SAARC' ];
+  regionActiva: string = '';
   paises: Country[] = [];
+
+//  (European Union)
+//  (European Free Trade Association)
+//  (Caribbean Community)
+//  (Pacific Alliance)
+//  (African Union)
+//  (Union of South American Nations)
+//  (Eurasian Economic Union)
+//  (Arab League)
+//  (Association of Southeast Asian Nations)
+//  (Central American Integration System)
+//  (Central European Free Trade Agreement)
+//  (North American Free Trade Agreement)
+//  (South Asian Association for Regional Cooperation)
 
   constructor(private paisService: PaisService) { }
 
-  buscar( termino: string){
-    this.hayError = false;
-    this.termino = termino;
-    console.log(this.termino);
+  getClaseCSS(region: string): string{
+    return (region === this.regionActiva) ? 'btn btn-primary' : 'btn btn-outline-primary';
+  }
 
-    this.paisService.buscarPorRegion(this.termino)
-    .subscribe((paises)=> {
-      console.log(paises);
-      this.paises = paises;
-    },
-      (err) => {
-        this.hayError = true;
+  activarRegion(region: string){
+    if (region === this.regionActiva){return}
+    this.regionActiva = region;
+
+    this.paises = [];
+
+    this.paisService.buscarPorRegion(this.regionActiva)
+      .subscribe((paises) =>{
+        this.paises = paises;
+      },
+      (err) =>{
         this.paises = [];
-      });
+      })
   }
-
-  sugerencias(termino: string){
-    this.hayError = false;
-
-  }
-
 }
